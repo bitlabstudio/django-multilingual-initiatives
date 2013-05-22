@@ -1,5 +1,8 @@
 === ongoing ===
 
+
+=== 0.2 ===
+
 - Added InitiativePersonRole model and inline admin
 - Copied and renamed everything from django-multilingual-orgs
 
