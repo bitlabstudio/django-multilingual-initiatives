@@ -1,0 +1,7 @@
+=== ongoing ===
+
+- Copied and renamed everything from django-multilingual-orgs
+
+=== 0.1 ===
+
+Initial commit
