@@ -95,6 +95,7 @@ EXTERNAL_APPS = [
     'easy_thumbnails',
     'simple_translation',
     'multilingual_orgs',
+    'people',
 ]
 
 INTERNAL_APPS = [

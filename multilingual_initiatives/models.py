@@ -89,6 +89,40 @@ class Initiative(SimpleTranslationMixin, models.Model):
         return self.get_translation().title
 
 
+class InitiativePersonRole(models.Model):
+    """
+    Intermediary model to connect an initiative to a person from
+    django-people.
+
+    :initiative: The initiative the person belongs to.
+    :person: The person that belongs to that initiative.
+    :role: The role of that person inside the initiative.
+    :position: An integer for ordering.
+
+    """
+
+    initiative = models.ForeignKey(
+        Initiative,
+        verbose_name=_('Initiative'),
+    )
+
+    person = models.ForeignKey(
+        'people.Person',
+        verbose_name=_('Person'),
+    )
+
+    role = models.ForeignKey(
+        'people.Role',
+        verbose_name=_('Role'),
+        blank=True, null=True,
+    )
+
+    position = models.PositiveIntegerField(
+        verbose_name=_('Position'),
+        blank=True, null=True,
+    )
+
+
 class InitiativePluginModel(CMSPlugin):
     """
     Model for the ``InitiativePluginModel`` cms plugin.

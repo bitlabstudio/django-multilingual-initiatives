@@ -32,6 +32,7 @@ setup(
         'simple-translation',
         'Pillow',
         'django-multilingual-orgs',
+        'django-people',
     ],
     tests_require=[
         'fabric',

@@ -7,11 +7,17 @@ from django_libs.admin import MultilingualPublishMixin
 from simple_translation.admin import TranslationAdmin
 from simple_translation.utils import get_preferred_translation_from_lang
 
-from .models import Initiative
+from .models import Initiative, InitiativePersonRole
+
+
+class InitiativePersonRoleInline(admin.TabularInline):
+    """Inline admin for ``InitiativePersonRole`` objects."""
+    model = InitiativePersonRole
 
 
 class InitiativeAdmin(MultilingualPublishMixin, TranslationAdmin):
     """Admin for the ``Initiative`` model."""
+    inlines = [InitiativePersonRoleInline]
     list_display = ['title', 'phone', 'website', 'start_date', 'end_date',
                     'description_short', 'organization', 'is_published']
 

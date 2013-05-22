@@ -19,6 +19,7 @@ You will need to have the following packages installed:
 * South
 * django-multilingual-orgs
 * django-libs
+* django-people
 
 
 Installation

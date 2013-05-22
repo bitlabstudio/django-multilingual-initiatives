@@ -6,6 +6,7 @@ from django.test import TestCase
 from ..models import Initiative
 from .factories import (
     InitiativeFactory,
+    InitiativePersonRoleFactory,
     InitiativePluginModelFactory,
     InitiativeTranslationFactory,
 )
@@ -52,6 +53,16 @@ class InitiativeTestCase(TestCase):
             'Should be able to instantiate and save the model.'))
         self.assertTrue(obj.get_translation(), msg=(
             'The factory should also create a translation'))
+
+
+class InitiativePersonRoleTestCase(TestCase):
+    """Tests for the ``InitiativePersonRole`` model."""
+    longMessage = True
+
+    def test_model(self):
+        obj = InitiativePersonRoleFactory()
+        self.assertTrue(obj.pk, msg=(
+            'Should be able to instantiate and save the model.'))
 
 
 class InitiativePluginModelTestCase(TestCase):

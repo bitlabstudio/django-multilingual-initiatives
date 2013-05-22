@@ -2,9 +2,11 @@
 import factory
 
 from django_libs.tests.factories import SimpleTranslationMixin
+from people.tests.factories import PersonFactory
 
 from ..models import (
     Initiative,
+    InitiativePersonRole,
     InitiativePluginModel,
     InitiativeTranslation,
 )
@@ -29,6 +31,14 @@ class InitiativeFactory(SimpleTranslationMixin, factory.Factory):
     @staticmethod
     def _get_translation_factory_and_field():
         return (InitiativeTranslationFactory, 'initiative')
+
+
+class InitiativePersonRoleFactory(factory.Factory):
+    """Factory for the ``InitiativePersonRole`` model."""
+    FACTORY_FOR = InitiativePersonRole
+
+    initiative = factory.SubFactory(InitiativeFactory)
+    person = factory.SubFactory(PersonFactory)
 
 
 class InitiativePluginModelFactory(factory.Factory):
