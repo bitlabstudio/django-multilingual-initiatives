@@ -22,7 +22,7 @@ LANGUAGES = (
     ('de', 'German'),
 )
 
-ROOT_URLCONF = 'multilingual_initiatives.tests.urls'
+ROOT_URLCONF = 'multilingual_initiatives.tests.test_app.urls'
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
@@ -100,10 +100,9 @@ EXTERNAL_APPS = [
 
 INTERNAL_APPS = [
     'multilingual_initiatives',
+    'multilingual_initiatives.tests.test_app',
 ]
 
-
-SECRET_KEY = 'this is no real secret key'
 
 INSTALLED_APPS = EXTERNAL_APPS + INTERNAL_APPS
 
@@ -117,3 +116,8 @@ CMS_FRONTEND_LANGUAGES = ('en', 'de', )
 CMS_TEMPLATES = (
     ('standard.html', 'Standard'),
 )
+
+SHORT_NAME_FORMAT = '{g} {l}'
+LONG_NAME_FORMAT = '{g} {f} {l}'
+
+SECRET_KEY = 'foobar'
