@@ -9,9 +9,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+
         db.rename_table('multilingual_initiatives_initiativetranslation', 'multilingual_initiatives_initiative_translation')
+        try:
+            db.drop_foreign_key('multilingual_initiatives_initiative_translation', 'initiative_id')
+        except:
+            pass
         db.rename_column('multilingual_initiatives_initiative_translation', 'initiative_id', 'master_id')
         db.rename_column('multilingual_initiatives_initiative_translation', 'language', 'language_code')
+        db.alter_column('multilingual_initiatives_initiative_translation', 'master_id', models.ForeignKey(to=orm['multilingual_initiatives.Initiative']))
 
     def backwards(self, orm):
         db.rename_column('multilingual_initiatives_initiative_translation', 'master_id', 'initiative_id')
