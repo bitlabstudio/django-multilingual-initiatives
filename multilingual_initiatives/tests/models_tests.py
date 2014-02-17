@@ -2,13 +2,13 @@
 from mock import Mock
 
 from django.test import TestCase
+from people.tests.factories import PersonFactory
 
 from ..models import Initiative
 from .factories import (
     InitiativeFactory,
     InitiativePersonRoleFactory,
     InitiativePluginModelFactory,
-    InitiativeTranslationFactory,
 )
 
 
@@ -17,12 +17,15 @@ class InitiativeManagerTestCase(TestCase):
     longMessage = True
 
     def setUp(self):
-        self.en_ini = InitiativeTranslationFactory(language='en')
-        self.de_ini = InitiativeTranslationFactory(language='de')
-        InitiativeTranslationFactory(language='de', is_published=True,
-                                     initiative=self.de_ini.initiative)
-        InitiativeTranslationFactory(language='en', is_published=True,
-                                     initiative=self.en_ini.initiative)
+        self.en_ini = InitiativeFactory(language_code='en')
+        self.de_ini = InitiativeFactory(language='de')
+
+        new_trans = self.en_ini.translate('de')
+        new_trans.is_published = True
+        new_trans.save()
+        new_trans = self.de_ini.translate('en')
+        new_trans.is_published = True
+        new_trans.save()
 
     def test_manager(self):
         """Test, if the ``InitiativeManager`` returns the right entries."""
@@ -51,8 +54,6 @@ class InitiativeTestCase(TestCase):
         obj = InitiativeFactory()
         self.assertTrue(obj.pk, msg=(
             'Should be able to instantiate and save the model.'))
-        self.assertTrue(obj.get_translation(), msg=(
-            'The factory should also create a translation'))
 
 
 class InitiativePersonRoleTestCase(TestCase):
@@ -60,7 +61,8 @@ class InitiativePersonRoleTestCase(TestCase):
     longMessage = True
 
     def test_model(self):
-        obj = InitiativePersonRoleFactory()
+        person = PersonFactory(language_code='en')
+        obj = InitiativePersonRoleFactory(person=person)
         self.assertTrue(obj.pk, msg=(
             'Should be able to instantiate and save the model.'))
 
@@ -71,16 +73,5 @@ class InitiativePluginModelTestCase(TestCase):
 
     def test_model(self):
         obj = InitiativePluginModelFactory()
-        self.assertTrue(obj.pk, msg=(
-            'Should be able to instantiate and save the model.'))
-
-
-class InitiativeTranslationTestCase(TestCase):
-    """Tests for the ``InitiativeTranslation`` model."""
-    longMessage = True
-
-    def test_model(self):
-        """Test instantiation of the ``InitiativeTranslation`` model."""
-        obj = InitiativeTranslationFactory(title='my initiative')
         self.assertTrue(obj.pk, msg=(
             'Should be able to instantiate and save the model.'))

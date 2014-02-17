@@ -93,7 +93,7 @@ EXTERNAL_APPS = [
     'filer',
     'mptt',
     'easy_thumbnails',
-    'simple_translation',
+    'hvad',
     'multilingual_orgs',
     'people',
 ]
