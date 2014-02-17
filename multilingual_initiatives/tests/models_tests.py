@@ -12,40 +12,6 @@ from .factories import (
 )
 
 
-class InitiativeManagerTestCase(TestCase):
-    """Tests for the ``InitiativeManager`` model manager."""
-    longMessage = True
-
-    def setUp(self):
-        self.en_ini = InitiativeFactory(language_code='en')
-        self.de_ini = InitiativeFactory(language='de')
-
-        new_trans = self.en_ini.translate('de')
-        new_trans.is_published = True
-        new_trans.save()
-        new_trans = self.de_ini.translate('en')
-        new_trans.is_published = True
-        new_trans.save()
-
-    def test_manager(self):
-        """Test, if the ``InitiativeManager`` returns the right entries."""
-        request = Mock(LANGUAGE_CODE='de')
-        self.assertEqual(
-            Initiative.objects.published(request).count(), 1, msg=(
-                'In German, there should be two published initiatives.'))
-
-        request = Mock(LANGUAGE_CODE='en')
-        self.assertEqual(
-            Initiative.objects.published(request).count(), 1, msg=(
-                'In English, there should be one published initiative.'))
-
-        request = Mock(LANGUAGE_CODE=None)
-        self.assertEqual(
-            Initiative.objects.published(request).count(), 0, msg=(
-                'If no language set, there should be no published'
-                ' initiatives.'))
-
-
 class InitiativeTestCase(TestCase):
     """Tests for the ``Initiative`` model."""
     longMessage = True

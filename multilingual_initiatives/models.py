@@ -3,30 +3,11 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from cms.models.pluginmodel import CMSPlugin
+from django_libs.models_mixins import HvadPublishedManager
 from filer.fields.file import FilerFileField
-from hvad.models import TranslatableModel, TranslatedFields, TranslationManager
+from hvad.models import TranslatableModel, TranslatedFields
 
 from . import settings
-
-
-class InitiativeManager(TranslationManager):
-    """Custom manager for the ``Initiative`` model."""
-    def published(self, request, check_language=True):
-        """
-        Returns all initiatives, which are published and in the currently
-        active language if check_language is True (default).
-
-        :param request: A Request instance.
-        :param check_language: Option to disable language filtering.
-
-        """
-        kwargs = {'translations__is_published': True}
-        if check_language:
-            language = getattr(request, 'LANGUAGE_CODE', None)
-            if not language:
-                self.model.objects.none()
-            kwargs.update({'translations__language_code': language})
-        return self.get_query_set().filter(**kwargs)
 
 
 class Initiative(TranslatableModel):
@@ -93,7 +74,7 @@ class Initiative(TranslatableModel):
         )
     )
 
-    objects = InitiativeManager()
+    objects = HvadPublishedManager()
 
     def __unicode__(self):
         return self.safe_translation_getter('title', 'Untranslated initiative')
