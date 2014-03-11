@@ -12,9 +12,9 @@ Prerequisites
 You will need to have the following packages installed:
 
 * Django
-* django-cms (optional)
+* django-cms 3 (beta)
 * django-filer
-* simple-translation
+* django-hvad
 * Pillow
 * South
 * django-multilingual-orgs

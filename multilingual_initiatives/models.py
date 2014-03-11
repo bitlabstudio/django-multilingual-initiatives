@@ -3,35 +3,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from cms.models.pluginmodel import CMSPlugin
-from django_libs.models_mixins import SimpleTranslationMixin
+from django_libs.models_mixins import HvadPublishedManager
 from filer.fields.file import FilerFileField
+from hvad.models import TranslatableModel, TranslatedFields
 
 from . import settings
 
 
-class InitiativeManager(models.Manager):
-    """Custom manager for the ``Initiative`` model."""
-    def published(self, request, check_language=True):
-        """
-        Returns all initiatives, which are published and in the currently
-        active language if check_language is True (default).
-
-        :param request: A Request instance.
-        :param check_language: Option to disable language filtering.
-
-        """
-        results = self.get_query_set().filter(
-            initiativetranslation__is_published=True)
-        if check_language:
-            language = getattr(request, 'LANGUAGE_CODE', None)
-            if not language:
-                self.model.objects.none()
-            results = results.filter(
-                initiativetranslation__language=language)
-        return results.distinct()
-
-
-class Initiative(SimpleTranslationMixin, models.Model):
+class Initiative(TranslatableModel):
     """
     Holds information about an initiative.
 
@@ -42,6 +21,8 @@ class Initiative(SimpleTranslationMixin, models.Model):
     :website: URL of the website.
     :phone: The phone number of that initiative. E.g. an information hotline
     :organization: The organization, that is responsible for the initiative.
+    :title: The title of the initiative.
+    :is_published: If the translation of this initiative is published or not.
 
     """
 
@@ -82,11 +63,21 @@ class Initiative(SimpleTranslationMixin, models.Model):
         verbose_name=_('Organization'),
         blank=True, null=True,
     )
+    translations = TranslatedFields(
+        title=models.CharField(
+            verbose_name=_('Title'),
+            max_length=2000,
+        ),
+        is_published=models.BooleanField(
+            verbose_name=_('Is published'),
+            default=False,
+        )
+    )
 
-    objects = InitiativeManager()
+    objects = HvadPublishedManager()
 
     def __unicode__(self):
-        return self.get_translation().title
+        return self.safe_translation_getter('title', 'Untranslated initiative')
 
 
 class InitiativePersonRole(models.Model):
@@ -139,39 +130,5 @@ class InitiativePluginModel(CMSPlugin):
 
     initiative = models.ForeignKey(
         Initiative,
-        verbose_name=_('Initiative'),
-    )
-
-
-class InitiativeTranslation(models.Model):
-    """
-    Translatable fields of the ``Initiative`` model.
-
-    :title: The title of the initiative.
-    :is_published: If the translation of this initiative is published or not.
-
-    Needed by simple translation:
-    :language: The language code for this translation. E.g. 'en'
-    :initiative: The initiative this is the translation of.
-
-    """
-    title = models.CharField(
-        verbose_name=_('Title'),
-        max_length=2000,
-    )
-
-    is_published = models.BooleanField(
-        verbose_name=_('Is published'),
-        default=False,
-    )
-
-    # Needed by simple translation
-    language = models.CharField(
-        verbose_name=_('Language'),
-        max_length=16,
-    )
-
-    initiative = models.ForeignKey(
-        'multilingual_initiatives.Initiative',
         verbose_name=_('Initiative'),
     )
