@@ -1,6 +1,10 @@
 === ongoing ===
 
 
+=== 1.0 ===
+
+- updated to django-hvad
+
 === 0.2 ===
 
 - Added InitiativePersonRole model and inline admin

@@ -11,15 +11,7 @@ Prerequisites
 
 You will need to have the following packages installed:
 
-* Django
-* django-cms 3 (beta)
-* django-filer
-* django-hvad
-* Pillow
-* South
-* django-multilingual-orgs
-* django-libs
-* django-people
+* django-cms (cms 3 beta tested)
 
 
 Installation
